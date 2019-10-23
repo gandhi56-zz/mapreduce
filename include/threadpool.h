@@ -1,7 +1,12 @@
 #ifndef THREADPOOL_H
 #define THREADPOOL_H
+
+#define MAX_THREADS 100000  // very theoretical, bitset needs some value
+
 #include <pthread.h>
-#include <stdbool.h>
+#include <queue>    // priority_queue
+#include <vector>
+#include <bitset>
 
 typedef void (*thread_func_t)(void *arg);
 
@@ -9,14 +14,44 @@ struct ThreadPool_work_t {
     thread_func_t func;              // The function pointer
     void *arg;                       // The arguments for the function
     // TODO: Add other members here if needed
+    bool operator<(const ThreadPool_work_t& work){
+        // TODO
+        return true;
+    }
 };
 
 struct ThreadPool_work_queue_t{
     // TODO: Add members here
+    std::priority_queue<ThreadPool_work_t> pq;
+
+    ThreadPool_work_queue_t(){
+
+    }
+
+    void push_job(ThreadPool_work_t job){
+        pq.push(job);
+    }
+
+    ThreadPool_work_t get_job(){
+        ThreadPool_work_t job = pq.top();
+        pq.pop();
+        return job;
+    }
+
 };
 
 struct ThreadPool_t{
     // TODO: Add members here
+    std::vector<pthread_t> threads;
+    std::bitset<MAX_THREADS> isActive;
+    ThreadPool_t(){
+        isActive.reset();
+    }
+
+    ThreadPool_t(int numThreads){
+        threads.resize(numThreads);
+        isActive.reset();
+    }
 };
 
 
@@ -27,7 +62,7 @@ struct ThreadPool_t{
 * Return:
 *     ThreadPool_t* - The pointer to the newly created ThreadPool object
 */
-ThreadPool_t *ThreadPool_create(int num);
+void ThreadPool_create(int num);
 
 /**
 * A C style destructor to destroy a ThreadPool object

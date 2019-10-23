@@ -1,0 +1,4 @@
+wordcount
+.vscode/c_cpp_properties.json
+obj/mapreduce.o
+obj/threadpool.o
