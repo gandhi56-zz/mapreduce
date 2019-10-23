@@ -5,19 +5,19 @@
 
 typedef void (*thread_func_t)(void *arg);
 
-typedef struct ThreadPool_work_t {
+struct ThreadPool_work_t {
     thread_func_t func;              // The function pointer
     void *arg;                       // The arguments for the function
     // TODO: Add other members here if needed
-} ThreadPool_work_t;
+};
 
-typedef struct {
+struct ThreadPool_work_queue_t{
     // TODO: Add members here
-} ThreadPool_work_queue_t;
+};
 
-typedef struct {
+struct ThreadPool_t{
     // TODO: Add members here
-} ThreadPool_t;
+};
 
 
 /**
