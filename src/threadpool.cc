@@ -1,4 +1,7 @@
-#include "../include/threadpool.h"
+
+#ifndef THREADPOOL_H
+	#include "../include/threadpool.h"
+#endif
 #include <stdio.h>
 
 

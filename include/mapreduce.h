@@ -1,3 +1,5 @@
+/* Do not modify! */
+
 #ifndef MAPREDUCE_H
 #define MAPREDUCE_H
 

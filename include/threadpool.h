@@ -20,29 +20,32 @@ struct ThreadPool_work_t {
     thread_func_t func;              // The function pointer
     void *arg;                       // The arguments for the function
     // TODO: Add other members here if needed
-    bool operator<(ThreadPool_work_t& work){
+
+    bool operator<(const ThreadPool_work_t& work) const {
         // TODO
         return true;
-    }
+    };
+
 };
+
 
 struct ThreadPool_work_queue_t{
     // TODO: Add members here
-    // std::priority_queue<ThreadPool_work_t> pq;
+    std::priority_queue<struct ThreadPool_work_t> pq;
 
     ThreadPool_work_queue_t(){
 
     }
 
     void push_job(ThreadPool_work_t job){
-        // pq.push(job);
+        pq.push(job);
     }
 
-    // ThreadPool_work_t get_job(){
-        // ThreadPool_work_t job = pq.top();
-        // pq.pop();
-        // return job;
-    // }
+    ThreadPool_work_t get_job(){
+        ThreadPool_work_t job = pq.top();
+        pq.pop();
+        return job;
+    }
 
 };
 
