@@ -1,20 +1,21 @@
 #ifndef THREADPOOL_H
 #define THREADPOOL_H
 
-#define MAX_THREADS 100000  // very theoretical, bitset needs initial some value
+#define FNAME_SIZE 100
 
 #include "../include/mapreduce.h"
 #include <pthread.h>
 #include <queue>    // priority_queue
 #include <vector>
 #include <bitset>
+#include <string.h>
 
 typedef void (*thread_func_t)(void *arg);
 
 struct FileObj{
-    char* filename;
+    char filename[FNAME_SIZE];
     int size;
-    FileObj(char* fname, int sz):filename(fname), size(sz) {}
+    FileObj(){}
     void info(){
         printf("filename:%s size:%d\n", filename, size);
     }
@@ -25,14 +26,19 @@ struct ThreadPool_work_t {
     FileObj arg;                       // The arguments for the function
     // TODO: Add other members here if needed
 
-    ThreadPool_work_t(FileObj fo)   :   arg(fo){};
+    ThreadPool_work_t(char* fname, int size, thread_func_t fun){
+        strcpy(arg.filename, fname);
+        arg.size = size;
+        func = fun;
+    }
+
     void info(){
         arg.info();
     }
     bool operator<(const ThreadPool_work_t& work) const {
         // number of words or characters???
         return arg.size < work.arg.size;
-    };
+    }
 };
 
 
@@ -81,12 +87,11 @@ struct ThreadPool_t{
 
 /**
 * A C style constructor for creating a new ThreadPool object,
-* assumes tp is empty and needs to be initialized
 * Parameters:
 *	  tp  - thread pool object passed by reference
 *     num - The number of threads to create
 */
-void ThreadPool_create(ThreadPool_t& tp, void* func);
+void ThreadPool_create(ThreadPool_t& tp);
 
 /**
 * A C style destructor to destroy a ThreadPool object

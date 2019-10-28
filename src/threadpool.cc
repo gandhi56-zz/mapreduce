@@ -4,15 +4,16 @@
 #endif
 #include <stdio.h>
 
+// Global variables
+pthread_mutex_t mtx;
 
 /**
-* A C style constructor for creating a new ThreadPool object,
-* assumes tp is empty and needs to be initialized
+* A C style constructor for creating a new ThreadPool object
 * Parameters:
 *	  tp  - thread pool object passed by reference
 *     num - The number of threads to create
 */
-void ThreadPool_create(ThreadPool_t& tp, void* func){
+void ThreadPool_create(ThreadPool_t& tp){
 	for (uint16_t i = 0; i < tp.threads.size(); ++i){
 		pthread_create(&tp.threads[i], NULL, [](void* pool) -> void*{
 				Thread_run((ThreadPool_t*)pool);
@@ -57,5 +58,10 @@ ThreadPool_work_t *ThreadPool_get_work(ThreadPool_t *tp);
 *     tp - The ThreadPool Object this thread belongs to
 */
 void *Thread_run(ThreadPool_t* tp){
+	// pthread_mutex_lock(&mtx);
+	// ThreadPool_work_t job = workQueue.get_job();
+	// pthread_mutex_unlock(&mtx);
+	// job.info();
+	// run job
 	return NULL;
 }

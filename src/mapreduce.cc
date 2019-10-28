@@ -1,5 +1,7 @@
 
-#include "../include/threadpool.h"  //
+#define debug
+
+#include "../include/threadpool.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -17,14 +19,15 @@ void MR_Run(int num_files, char *filenames[],
             printf("parsing %s\n", filenames[i]);
         #endif
         stat(filenames[i], &st);
-        waitQueue.push_job(ThreadPool_work_t(FileObj(filenames[i], st.st_size)));
+
+        // create a job
+        ThreadPool_work_t work(filenames[i], st.st_size, (thread_func_t)map);
+        waitQueue.push_job(work);
     }
 
     // create the pools
     ThreadPool_t mapThreads(num_mappers);
-    ThreadPool_create(mapThreads, (void*)map);
-    
-
+    ThreadPool_create(mapThreads);
 }
 
 void MR_Emit(char *key, char *value){}
