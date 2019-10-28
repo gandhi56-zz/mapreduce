@@ -21,10 +21,9 @@ void MR_Run(int num_files, char *filenames[],
     }
 
     // create the pools
-    // ThreadPool_t mapThreads;
-    // ThreadPool_t reduceThreads;
-    // ThreadPool_create(mapThreads, num_mappers, map);
-    // ThreadPool_create(reduceThreads, num_reducers, concate);
+    ThreadPool_t mapThreads(num_mappers);
+    ThreadPool_create(mapThreads, (void*)map);
+    
 
 }
 

@@ -12,15 +12,13 @@
 *	  tp  - thread pool object passed by reference
 *     num - The number of threads to create
 */
-void ThreadPool_create(ThreadPool_t& tp, int num, void* func){
-	// tp.threads.resize(num);
-	// tp.isActive.reset();
-	// for (int i = 0; i < tp.threads.size(); ++i){
-	// 	// tp.create_thread(tp.threads[i], func);
-	// 	pthread_create(&tp.threads[i], NULL, [](void* tp) -> void* {
-	// 		Thread_run((ThreadPool_t*)tp);
-	// 	}, &tp);
-	// }
+void ThreadPool_create(ThreadPool_t& tp, void* func){
+	for (uint16_t i = 0; i < tp.threads.size(); ++i){
+		pthread_create(&tp.threads[i], NULL, [](void* pool) -> void*{
+				Thread_run((ThreadPool_t*)pool);
+				return NULL;
+			}, &tp);
+	}
 }
 
 /**
@@ -28,8 +26,8 @@ void ThreadPool_create(ThreadPool_t& tp, int num, void* func){
 * Parameters:
 *     tp - The pointer to the ThreadPool object to be destroyed
 */
-void ThreadPool_destroy(ThreadPool_t *tp){
-	// TODO
+void ThreadPool_destroy(ThreadPool_t& tp){
+	tp.threads.clear();
 }
 
 /**
@@ -58,4 +56,6 @@ ThreadPool_work_t *ThreadPool_get_work(ThreadPool_t *tp);
 * Parameters:
 *     tp - The ThreadPool Object this thread belongs to
 */
-void *Thread_run(ThreadPool_t *tp);
+void *Thread_run(ThreadPool_t* tp){
+	return NULL;
+}

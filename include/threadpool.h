@@ -3,8 +3,7 @@
 
 #define MAX_THREADS 100000  // very theoretical, bitset needs initial some value
 
-#include "mapreduce.h"
-
+#include "../include/mapreduce.h"
 #include <pthread.h>
 #include <queue>    // priority_queue
 #include <vector>
@@ -31,6 +30,7 @@ struct ThreadPool_work_t {
         arg.info();
     }
     bool operator<(const ThreadPool_work_t& work) const {
+        // number of words or characters???
         return arg.size < work.arg.size;
     };
 };
@@ -67,22 +67,14 @@ struct ThreadPool_work_queue_t{
 struct ThreadPool_t{
     // TODO: Add members here
     std::vector<pthread_t> threads;
-    std::bitset<MAX_THREADS> isActive;
-    ThreadPool_t(){
-        isActive.reset();
-    }
+    ThreadPool_t(){}
 
     ThreadPool_t(int numThreads){
         threads.resize(numThreads);
-        isActive.reset();
     }
 
     void create_thread(int idx, void* func){
         // pthread_create(&threads[idx], NULL, func, NULL);
-    }
-
-    bool is_active(int idx){
-        return isActive.test(idx);
     }
 };
 
@@ -94,7 +86,7 @@ struct ThreadPool_t{
 *	  tp  - thread pool object passed by reference
 *     num - The number of threads to create
 */
-void ThreadPool_create(ThreadPool_t& tp, int num, void* func);
+void ThreadPool_create(ThreadPool_t& tp, void* func);
 
 /**
 * A C style destructor to destroy a ThreadPool object
@@ -129,6 +121,5 @@ ThreadPool_work_t *ThreadPool_get_work(ThreadPool_t *tp);
 * Parameters:
 *     tp - The ThreadPool Object this thread belongs to
 */
-void *Thread_run(ThreadPool_t *tp);
-
+void *Thread_run(ThreadPool_t* tp);
 #endif
