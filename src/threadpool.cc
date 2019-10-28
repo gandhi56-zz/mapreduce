@@ -1,6 +1,6 @@
 
 #ifndef THREADPOOL_H
-	#include "../include/threadpool.h"
+	#include "../include/threadpool.h"	// threadpool.h includes mapreduce.h
 #endif
 #include <stdio.h>
 
@@ -12,9 +12,15 @@
 *	  tp  - thread pool object passed by reference
 *     num - The number of threads to create
 */
-void ThreadPool_create(ThreadPool_t& tp, int num){
-	tp.threads.resize(num);
-	tp.isActive.reset();
+void ThreadPool_create(ThreadPool_t& tp, int num, void* func){
+	// tp.threads.resize(num);
+	// tp.isActive.reset();
+	// for (int i = 0; i < tp.threads.size(); ++i){
+	// 	// tp.create_thread(tp.threads[i], func);
+	// 	pthread_create(&tp.threads[i], NULL, [](void* tp) -> void* {
+	// 		Thread_run((ThreadPool_t*)tp);
+	// 	}, &tp);
+	// }
 }
 
 /**

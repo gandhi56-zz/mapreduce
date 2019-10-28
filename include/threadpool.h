@@ -3,6 +3,8 @@
 
 #define MAX_THREADS 100000  // very theoretical, bitset needs initial some value
 
+#include "mapreduce.h"
+
 #include <pthread.h>
 #include <queue>    // priority_queue
 #include <vector>
@@ -14,24 +16,29 @@ struct FileObj{
     char* filename;
     int size;
     FileObj(char* fname, int sz):filename(fname), size(sz) {}
+    void info(){
+        printf("filename:%s size:%d\n", filename, size);
+    }
 };
 
 struct ThreadPool_work_t {
     thread_func_t func;              // The function pointer
-    void *arg;                       // The arguments for the function
+    FileObj arg;                       // The arguments for the function
     // TODO: Add other members here if needed
 
+    ThreadPool_work_t(FileObj fo)   :   arg(fo){};
+    void info(){
+        arg.info();
+    }
     bool operator<(const ThreadPool_work_t& work) const {
-        // TODO
-        return true;
+        return arg.size < work.arg.size;
     };
-
 };
 
 
 struct ThreadPool_work_queue_t{
     // TODO: Add members here
-    std::priority_queue<struct ThreadPool_work_t> pq;
+    std::priority_queue<ThreadPool_work_t> pq;
 
     ThreadPool_work_queue_t(){
 
@@ -45,6 +52,14 @@ struct ThreadPool_work_queue_t{
         ThreadPool_work_t job = pq.top();
         pq.pop();
         return job;
+    }
+
+    void pop(){
+        pq.pop();
+    }
+
+    bool empty(){
+        return pq.empty();
     }
 
 };
@@ -62,6 +77,10 @@ struct ThreadPool_t{
         isActive.reset();
     }
 
+    void create_thread(int idx, void* func){
+        // pthread_create(&threads[idx], NULL, func, NULL);
+    }
+
     bool is_active(int idx){
         return isActive.test(idx);
     }
@@ -75,7 +94,7 @@ struct ThreadPool_t{
 *	  tp  - thread pool object passed by reference
 *     num - The number of threads to create
 */
-void ThreadPool_create(ThreadPool_t& tp, int num);
+void ThreadPool_create(ThreadPool_t& tp, int num, void* func);
 
 /**
 * A C style destructor to destroy a ThreadPool object

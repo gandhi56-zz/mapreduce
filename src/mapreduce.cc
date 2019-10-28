@@ -1,6 +1,5 @@
 
-#include "../include/threadpool.h"
-#include "../include/mapreduce.h"
+#include "../include/threadpool.h"  //
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -9,16 +8,23 @@ void MR_Run(int num_files, char *filenames[],
             Mapper map, int num_mappers,
             Reducer concate, int num_reducers){
 
-    ThreadPool_t mapThreads;
-    ThreadPool_t reduceThreads;
-    ThreadPool_create(mapThreads, num_mappers);
-    ThreadPool_create(reduceThreads, num_reducers);
+    ThreadPool_work_queue_t waitQueue;
 
-    struct stat sb;
+    // push all jobs
+    struct stat st;
     for (int i = 0; i < num_files; ++i){
-        lstat(filenames[i], &sb);
-        FileObj fo(filenames[i], sb.st_size);
+        #ifdef debug
+            printf("parsing %s\n", filenames[i]);
+        #endif
+        stat(filenames[i], &st);
+        waitQueue.push_job(ThreadPool_work_t(FileObj(filenames[i], st.st_size)));
     }
+
+    // create the pools
+    // ThreadPool_t mapThreads;
+    // ThreadPool_t reduceThreads;
+    // ThreadPool_create(mapThreads, num_mappers, map);
+    // ThreadPool_create(reduceThreads, num_reducers, concate);
 
 }
 
