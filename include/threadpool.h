@@ -1,7 +1,7 @@
 #ifndef THREADPOOL_H
 #define THREADPOOL_H
 
-#define FNAME_SIZE 100
+#define FNAME_SIZE 64
 
 #include "../include/mapreduce.h"
 #include <pthread.h>
@@ -25,6 +25,8 @@ struct ThreadPool_work_t {
     thread_func_t func;              // The function pointer
     FileObj arg;                       // The arguments for the function
     // TODO: Add other members here if needed
+
+    ThreadPool_work_t(){};
 
     ThreadPool_work_t(char* fname, int size, thread_func_t fun){
         strcpy(arg.filename, fname);
@@ -58,6 +60,10 @@ struct ThreadPool_work_queue_t{
         ThreadPool_work_t job = pq.top();
         pq.pop();
         return job;
+    }
+
+    int size(){
+        return pq.size();
     }
 
     void pop(){
@@ -110,7 +116,7 @@ void ThreadPool_destroy(ThreadPool_t *tp);
 *     true  - If successful
 *     false - Otherwise
 */
-bool ThreadPool_add_work(ThreadPool_t *tp, thread_func_t func, void *arg);
+bool ThreadPool_add_work(ThreadPool_work_t work);
 
 /**
 * Get a task from the given ThreadPool object

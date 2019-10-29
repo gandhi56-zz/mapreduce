@@ -1,16 +1,13 @@
 
-#define debug
+// #define debug
 
 #include "../include/threadpool.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
 
-void MR_Run(int num_files, char *filenames[],
-            Mapper map, int num_mappers,
-            Reducer concate, int num_reducers){
-
-    ThreadPool_work_queue_t waitQueue;
+void MR_Run(int num_files, char *filenames[], Mapper map, int num_mappers, 
+    Reducer concate, int num_reducers){
 
     // push all jobs
     struct stat st;
@@ -22,7 +19,7 @@ void MR_Run(int num_files, char *filenames[],
 
         // create a job
         ThreadPool_work_t work(filenames[i], st.st_size, (thread_func_t)map);
-        waitQueue.push_job(work);
+        ThreadPool_add_work(work);
     }
 
     // create the pools
@@ -30,7 +27,9 @@ void MR_Run(int num_files, char *filenames[],
     ThreadPool_create(mapThreads);
 }
 
-void MR_Emit(char *key, char *value){}
+void MR_Emit(char *key, char *value){
+    printf("key=%s\n", key);
+}
 
 unsigned long MR_Partition(char *key, int num_partitions){
     return 0;
