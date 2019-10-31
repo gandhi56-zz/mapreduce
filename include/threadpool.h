@@ -27,6 +27,9 @@ struct ThreadPool_work_t {
     // TODO: Add other members here if needed
 
     ThreadPool_work_t(){};
+    ThreadPool_work_t(thread_func_t fun){
+        func = fun;
+    };
 
     ThreadPool_work_t(char* fname, int size, thread_func_t fun){
         strcpy(arg.filename, fname);
@@ -77,7 +80,6 @@ struct ThreadPool_work_queue_t{
 };
 
 struct ThreadPool_t{
-    // TODO: Add members here
     std::vector<pthread_t> threads;
     ThreadPool_t(){}
 
@@ -104,7 +106,7 @@ void ThreadPool_create(ThreadPool_t& tp);
 * Parameters:
 *     tp - The pointer to the ThreadPool object to be destroyed
 */
-void ThreadPool_destroy(ThreadPool_t *tp);
+void ThreadPool_destroy(ThreadPool_t& tp);
 
 /**
 * Add a task to the ThreadPool's task queue
@@ -133,4 +135,6 @@ ThreadPool_work_t *ThreadPool_get_work(ThreadPool_t *tp);
 *     tp - The ThreadPool Object this thread belongs to
 */
 void *Thread_run(ThreadPool_t* tp);
+
+void clear_mem();
 #endif
