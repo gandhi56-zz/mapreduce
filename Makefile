@@ -2,23 +2,20 @@
 CC = g++
 CCFLAGS = -Wall -Werror -pthread -std=c++17
 BINNAME = wordcount
-OBJ = obj/
-SRC = src/
 
 .PHONY: clean compile
 $(BINNAME):	compile
-	@$(CC) $(CCFLAGS) $(SRC)distwc.cc $(OBJ)threadpool.o $(OBJ)mapreduce.o -o $@
+	@$(CC) $(CCFLAGS) distwc.cc threadpool.o mapreduce.o -o $@
 
 compile:
-	@mkdir -p $(OBJ)
-	@$(CC) $(CCFLAGS) -c $(SRC)threadpool.cc -o $(OBJ)threadpool.o
-	@$(CC) $(CCFLAGS) -c $(SRC)mapreduce.cc -o $(OBJ)mapreduce.o
+	@$(CC) $(CCFLAGS) -c threadpool.cc -o threadpool.o
+	@$(CC) $(CCFLAGS) -c mapreduce.cc -o mapreduce.o
 
 run: $(BINNAME)
 	@./wordcount
 
 clean:
-	@rm -rf $(OBJ)
+	@rm -rf wordcount threadpool.o mapreduce.o
 
 compress:
 	tar -caf $(BINNAME).tar.gz $(SOURCES) Makefile README.md
