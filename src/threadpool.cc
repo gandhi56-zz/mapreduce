@@ -1,5 +1,5 @@
 
-#define FOO
+//#define FOO
 
 #ifndef THREADPOOL_H
 	#include "../include/threadpool.h"	// threadpool.h includes mapreduce.h
