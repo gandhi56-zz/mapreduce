@@ -51,11 +51,6 @@ void MR_Run(int num_files, char *filenames[], Mapper map, int num_mappers,
 		pthread_join(thread, nullptr);
 	}
 
-	// create and push self-destroy jobs
-	//ThreadPool_destroy(mapThreads);
-	clear_mem();
-	//show_partitions();
-
 	// create reducer threads
 	std::vector<pthread_t> reduceThreads(num_reducers);
 	for (int idx = 0; idx < num_reducers; ++idx){
