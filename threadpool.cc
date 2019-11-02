@@ -37,8 +37,6 @@ void *Thread_run(ThreadPool_t* tp){
 		if (waitQueue.size() == 0)	break;
 		work = waitQueue.get_job();
 		pthread_mutex_unlock(&mtx);
-		
-		// execute map
 		work.func(work.arg.filename);
 	}
 	pthread_mutex_unlock(&mtx);

@@ -18,4 +18,4 @@ clean:
 	@rm -rf wordcount threadpool.o mapreduce.o
 
 compress:
-	tar -caf $(BINNAME).tar.gz $(SOURCES) Makefile README.md
+	tar -caf $(BINNAME).tar.gz threadpool.cc mapreduce.cc threadpool.h mapreduce.h Makefile README.md

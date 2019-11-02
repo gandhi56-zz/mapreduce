@@ -8,10 +8,8 @@
 #include <unistd.h>	// sleep
 
 // global variables
-pthread_mutex_t partitionsMtx;
 extern pthread_mutex_t mtx;
-extern pthread_cond_t condVar;
-std::vector<std::multimap<std::string, std::string> > partitions;
+std::vector<std::multimap<std::string, std::string> > partitions;	// shared mem
 Reducer reduceCallback;
 
 void show_partitions(){
@@ -24,22 +22,14 @@ void show_partitions(){
 	}
 }
 
-void MR_Run(int num_files, char *filenames[], Mapper map, int num_mappers, 
-    Reducer concate, int num_reducers){
-    
+void MR_Run(int num_files, char *filenames[], Mapper map, int num_mappers, Reducer concate, int num_reducers){
 	reduceCallback = concate;
-
 	partitions.resize(num_reducers);
-
-	// create and push all map jobs
 	
 	struct stat st;
     for (int i = 0; i < num_files; ++i){
         stat(filenames[i], &st);
-        ThreadPool_work_t work(filenames[i], st.st_size, (thread_func_t)map);
-
-        ThreadPool_add_work(work);
-		//pthread_cond_signal(&condVar);
+        ThreadPool_add_work(ThreadPool_work_t(filenames[i], st.st_size, (thread_func_t)map));
     }
 	
 	// create the mappers pool
@@ -54,7 +44,6 @@ void MR_Run(int num_files, char *filenames[], Mapper map, int num_mappers,
 	// create reducer threads
 	std::vector<pthread_t> reduceThreads(num_reducers);
 	for (int idx = 0; idx < num_reducers; ++idx){
-		
 		pthread_create(&reduceThreads[idx], nullptr, [](void* idx) -> void*{
 				MR_ProcessPartition(*(int*)idx);
 				delete (int*)idx;
@@ -74,9 +63,7 @@ void MR_Run(int num_files, char *filenames[], Mapper map, int num_mappers,
 
 void MR_Emit(char *key, char *value){
     pthread_mutex_lock(&mtx);
-    int num_partitions = partitions.size();
-
-    unsigned long idx = MR_Partition(key, num_partitions);
+    unsigned long idx = MR_Partition(key, partitions.size());
     partitions[idx].insert(std::make_pair(std::string(key), std::string(value)));
 	#ifdef FOO
 		printf("[%lu] recv %s\n", idx, key);
