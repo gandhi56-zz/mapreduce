@@ -1,9 +1,10 @@
 # mapreduce
 
-Author	: 	Anshil Gandhi
-CCID	:	1523205
+	Author	: 	Anshil Gandhi
+	CCID	:	1523205
 
 ## Overview
+
 mapreduce library is a programming model and a distributed computing paradigm for large-scale data processing. It allows for applications to run tasks in parallel, making them scalable and fault-tolerant.
 
 To use the mapreduce library, developers must implement two `callback` functions, namely map and reduce. 
@@ -12,9 +13,9 @@ To use the mapreduce library, developers must implement two `callback` functions
 
 ## Modifications
 * changed threadpool function types to void and pass threadpool by reference for in-place update, for computation speedup
-* removed ThreadPool_destroy function, each thread is destroyed as soon as there is no job left for it to work on
-* ThreadPool_add_work is changed from being a bool function to a void function
-* ThreadPool_work_t *ThreadPool_get_work(ThreadPool_t *tp) is replaced as a method within the ThreadPool_work_queue_t struct for better code style
+* removed `ThreadPool_destroy` function, each thread is destroyed as soon as there is no job left for it to work on
+* `ThreadPool_add_work` is changed from being a bool function to a void function
+* `ThreadPool_work_t *ThreadPool_get_work(ThreadPool_t *tp)` is replaced as a method within the `ThreadPool_work_queue_t` struct for better code style
 
 ## Additional notes
 * Threads in the thread pool are referred by their thread ID, each of them stored in `std::vector`
