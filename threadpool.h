@@ -100,8 +100,7 @@ struct ThreadPool_t{
 *	  tp  - thread pool object passed by reference
 */
 void ThreadPool_create(ThreadPool_t& tp);
-
-
+void* kill_job();
 /**
 * Add a task to the ThreadPool's task queue
 * Parameters:
@@ -115,5 +114,5 @@ void ThreadPool_add_work(ThreadPool_work_t work);
 *     tp - The ThreadPool Object this thread belongs to
 */
 void *Thread_run(ThreadPool_t* tp);
-
+void *Thread_run_cv(ThreadPool_t* tp);
 #endif
