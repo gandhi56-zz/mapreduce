@@ -5,3 +5,16 @@ obj/threadpool.o
 a.txt
 b.txt
 c.txt
+mapreduce.o
+mapreduce.tar.gz
+README[1].md
+result-1.txt
+result-3.txt
+result-4.txt
+result-7.txt
+result-9.txt
+threadpool.o
+distwc-test-cases/death-incarnate/test.sh
+distwc-test-cases/easy/test.sh
+distwc-test-cases/hard/test.sh
+distwc-test-cases/medium/test.sh
