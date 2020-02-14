@@ -216933,3 +216933,6 @@ apple: 0
 apple: 0
 apple: 3
 scientist: 1
+apple: 3
+crocodile: 1
+scientist: 1
